@@ -1,0 +1,14 @@
+#cartList {
+  display: flex;
+  flex-direction: column;
+}
+
+#cartHeader {
+  text-align: center;
+}
+
+#cartContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

@@ -1,0 +1,13 @@
+GET http://localhost:4649/products/
+
+
+###
+POST http://localhost:4649/cart/
+Content-Type: application/json
+
+{
+    "title":"new"
+}
+
+###
+DELETE  http://localhost:4649/cart/62347abc256061ce26683be0/

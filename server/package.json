@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/aliuj22/di-project-shopping#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.3",
     "mongodb": "^4.4.1"
   },

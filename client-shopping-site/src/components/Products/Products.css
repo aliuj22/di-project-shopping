@@ -1,0 +1,29 @@
+#productsSection {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#productsTitle {
+  width: 95%;
+  text-align: center;
+}
+
+#productsImg {
+  width: 38vw;
+  height: 27vw;
+  border-radius: 10%;
+}
+
+#productsList {
+  width: 40vw;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  row-gap: 2rem;
+}

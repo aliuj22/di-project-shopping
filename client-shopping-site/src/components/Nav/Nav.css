@@ -1,0 +1,19 @@
+.nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 1% 2%;
+  /* border-bottom-style: solid; */
+  border-color: black;
+  border-width: 0.1px;
+  margin-bottom: 10px}
+
+.link {
+  margin: 1% 5%;
+  text-decoration: none;
+  color: black;
+  font-weight: 500;
+}
+
+.home {
+  margin-right: auto;
+}
