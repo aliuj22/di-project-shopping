@@ -4,14 +4,28 @@ export default function Products(props) {
   async function postToCart(url = '', data = {}) {
     const response = await fetch(url, {
       method: 'POST',
+      credentials: 'include',
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     });
+    alert('Item Added To Cart');
     return response.json();
   }
+
+  // async function buyNow(url = '') {
+  //   const response = await fetch(url, {
+  //     method: 'POST',
+  //     mode: 'cors',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify(props.products.title),
+  //   });
+  //   return response.json();
+  // }
 
   return (
     <section id="productsSection">
@@ -26,15 +40,22 @@ export default function Products(props) {
               <p>Price Per Hour: {products.pricePerHr}</p>
               <button
                 onClick={() =>
-                  postToCart('http://localhost:4649/cart/', { products }).then(
-                    (data) => {
-                      console.log(data);
-                    }
-                  )
+                  postToCart('http://localhost:4649/cart/', {
+                    products: [
+                      {
+                        productId: products._id,
+                      },
+                    ],
+                  }).then((data) => {
+                    console.log(data);
+                  })
                 }
               >
                 Add to Cart
               </button>
+              {/* <button onClick={() => buyNow('http://localhost:4649/orders/')}>
+                Buy Now
+              </button> */}
             </li>
           ))}
         </ul>

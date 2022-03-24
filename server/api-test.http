@@ -1,13 +1,28 @@
-GET http://localhost:4649/products/
+GET http://localhost:4649/cart/623c7ce934844f71c9f96b82
 
 
 ###
-POST http://localhost:4649/cart/
+POST http://localhost:4649/cart/623c7ce934844f71c9f96b82
 Content-Type: application/json
 
 {
-    "title":"new"
+                    "products": [
+                      {
+                        "productId": "623459afaf6564d90225f904"
+                      }
+                    ]
+                  
 }
 
 ###
-DELETE  http://localhost:4649/cart/62347abc256061ce26683be0/
+DELETE  http://localhost:4649/cart/623c7ce934844f71c9f96b82/623459afaf6564d90225f904
+
+###
+PATCH http://localhost:4649/cart/623b0a6f060f0b8bfa71de0c
+Content-Type: application/json
+
+{
+    "products": [{
+        "new": "fromcdoe"
+    }]
+}

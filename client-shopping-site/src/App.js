@@ -8,6 +8,7 @@ import {
   Whoops404,
   Nav,
 } from './components/pages';
+// import Cookies from 'universal-cookie';
 
 function App() {
   const [products, setProducts] = useState(null);
@@ -19,6 +20,13 @@ function App() {
   }, []);
 
   console.log(products);
+
+  // const cookies = new Cookies();
+  // cookies.set('test', 'Testing', {
+  //   path: '/',
+  //   expires: new Date(Date.now() + 86400000),
+  // });
+  // console.log(cookies.get('test'));
 
   return (
     <div className="App">

@@ -18,6 +18,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: 'http://localhost:3000',
+    credentials: true,
   })
 );
 
@@ -72,7 +73,38 @@ app.get('/orders', async (req, res) => {
 app.post('/cart', async (req, res) => {
   console.log('3');
   const selectedProduct = req.body;
-  await cartCollection.insertOne(selectedProduct);
+  let document = await cartCollection.insertOne(selectedProduct);
+  res.json({ cartId: document.insertedId });
+
+  // if (!document.insertedId) {
+  //   let document = await cartCollection.insertOne(selectedProduct);
+  //   res.cookie('cartId', document.insertedId);
+  //   console.log(JSON.stringify(document.insertedId));
+  //   res.json({});
+  // } else {
+  //   await cartCollection.updateOne(, {$push: })
+  // }
+});
+
+app.post('/cart/:Id', async (req, res) => {
+  const Id = req.params.Id;
+  const selectedProduct = req.body;
+
+  await cartCollection.updateOne(
+    { _id: new mongodb.ObjectId(Id) },
+    { $push: { products: selectedProduct.products[0] } }
+  );
+  res.json({});
+});
+
+app.delete('/cart/:Id/:productId', async (req, res) => {
+  const Id = req.params.Id;
+  const selectedProduct = req.params.productId;
+
+  await cartCollection.updateOne(
+    { _id: new mongodb.ObjectId(Id) },
+    { $pull: { products: { productId: selectedProduct } } }
+  );
   res.json({});
 });
 
@@ -100,11 +132,34 @@ app.delete('/cart', async (req, res) => {
   res.sendStatus(200);
 });
 
-app.get('/cart', async (req, res) => {
-  console.log('5');
-  const result = await cartCollection.find({}).toArray();
+app.get('/cart/:Id', async (req, res) => {
+  const Id = req.params.Id;
+
+  const result = await cartCollection.findOne({
+    _id: new mongodb.ObjectId(Id),
+  });
   console.log(result);
   res.json(result);
+});
+
+app.patch('/cart/:Id', async (req, res) => {
+  const Id = req.params.Id;
+  const requestBody = req.body;
+
+  const documentCount = await cartCollection.count({
+    _id: new mongodb.ObjectId(Id),
+  });
+  const idExists = documentCount === 1;
+
+  if (idExists) {
+    await cartCollection.updateOne(
+      { _id: new mongodb.ObjectId(Id) },
+      { $set: requestBody }
+    );
+    res.status(200).end();
+  } else {
+    res.sendStatus(404);
+  }
 });
 
 app.listen(PORT, () => {
