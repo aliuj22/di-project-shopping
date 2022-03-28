@@ -1,16 +1,9 @@
-import { useState, useEffect } from 'react';
 import './Cart.css';
+import Item from '../Item/Item';
+import { Whoops404 } from '../pages';
 
-export default function Cart() {
-  const [cart, setCart] = useState(null);
-
-  useEffect(() => {
-    fetch('http://localhost:4649/cart/')
-      .then((res) => res.json())
-      .then(setCart);
-  }, []);
-
-  console.log('cart', cart);
+export default function Cart(props) {
+  console.log('from cart', props.cart.products);
 
   async function deleteFromCart(url = '', data = {}) {
     const response = await fetch(url, {
@@ -36,20 +29,24 @@ export default function Cart() {
   //     return response.json();
   //   }
 
-
-
   return (
     <div id="cartContainer">
       <h1 id="cartHeader">[Cart]</h1>
-      {cart && (
+
+      {props.cart.products && (
         <ul id="cartList">
-          {cart.map((cart, i) => (
+          {props.cart.products.map((cart, i) => (
             <li id="productsList" key={i}>
-              <h3>{cart.products.title}</h3>
-              <p>Price Per Hour: {cart.products.pricePerHr}</p>
+              {props.products ? (
+                <Item cart={cart} products={props.products} />
+              ) : (
+                <Whoops404 />
+              )}
               <button
                 onClick={() =>
-                  deleteFromCart(`http://localhost:4649/cart/${cart._id}`)
+                  deleteFromCart(
+                    `http://localhost:4649/cart/${props.cart._id}/${cart.productId}/`
+                  )
                 }
               >
                 Remove from Cart

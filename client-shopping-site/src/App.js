@@ -8,7 +8,6 @@ import {
   Whoops404,
   Nav,
 } from './components/pages';
-// import Cookies from 'universal-cookie';
 
 function App() {
   const [products, setProducts] = useState(null);
@@ -21,21 +20,39 @@ function App() {
 
   console.log(products);
 
-  // const cookies = new Cookies();
-  // cookies.set('test', 'Testing', {
-  //   path: '/',
-  //   expires: new Date(Date.now() + 86400000),
-  // });
-  // console.log(cookies.get('test'));
+  const [cartId, setCartId] = useState(
+    JSON.parse(localStorage.getItem('items'))
+  );
+
+  const [cart, setCart] = useState(null);
+  useEffect(() => {
+    if (cartId) {
+      fetch(`http://localhost:4649/cart/${cartId.cartId}/`)
+        .then((res) => res.json())
+        .then(setCart);
+    }
+  }, [cartId]);
+
+  console.log('cart', cart);
 
   return (
     <div className="App">
       <Nav />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products products={products} />} />
+        <Route
+          path="/products"
+          element={
+            <Products products={products} cart={cart} setCartId={setCartId} />
+          }
+        />
         <Route path="/orders" element={<Orders />} />
-        <Route path="/cart" element={<Cart />} />
+        <Route
+          path="/cart"
+          element={
+            cart ? <Cart products={products} cart={cart} /> : <Whoops404 />
+          }
+        />
         <Route path="*" element={<Whoops404 />} />
       </Routes>
     </div>

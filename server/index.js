@@ -63,29 +63,28 @@ app.post('/orders', async (req, res) => {
 });
 
 app.get('/orders', async (req, res) => {
-  console.log('5');
   const result = await cartCollection.find({}).toArray();
   console.log(result);
   res.json(result);
 });
 
 //________________CART____________________//
+
+        // getting all carts //
+app.get('/cart', async (req, res) => {
+  const result = await cartCollection.find({}).toArray();
+  console.log(result);
+  res.json(result);
+});
+
+        // creating cart with unique id //
 app.post('/cart', async (req, res) => {
-  console.log('3');
   const selectedProduct = req.body;
   let document = await cartCollection.insertOne(selectedProduct);
   res.json({ cartId: document.insertedId });
-
-  // if (!document.insertedId) {
-  //   let document = await cartCollection.insertOne(selectedProduct);
-  //   res.cookie('cartId', document.insertedId);
-  //   console.log(JSON.stringify(document.insertedId));
-  //   res.json({});
-  // } else {
-  //   await cartCollection.updateOne(, {$push: })
-  // }
 });
 
+        //adding items to existing cart //
 app.post('/cart/:Id', async (req, res) => {
   const Id = req.params.Id;
   const selectedProduct = req.body;
@@ -97,6 +96,7 @@ app.post('/cart/:Id', async (req, res) => {
   res.json({});
 });
 
+        // deleting specific product from chosen cart //
 app.delete('/cart/:Id/:productId', async (req, res) => {
   const Id = req.params.Id;
   const selectedProduct = req.params.productId;
@@ -107,7 +107,7 @@ app.delete('/cart/:Id/:productId', async (req, res) => {
   );
   res.json({});
 });
-
+        // deleting chosen cart //
 app.delete('/cart/:Id', async (req, res) => {
   const Id = req.params.Id;
 
@@ -125,13 +125,14 @@ app.delete('/cart/:Id', async (req, res) => {
     res.sendStatus(404);
   }
 });
-
+        // deleting everything from cart collection //
 app.delete('/cart', async (req, res) => {
   console.log('4');
   await cartCollection.deleteMany({});
   res.sendStatus(200);
 });
 
+        // getting a specific cart //
 app.get('/cart/:Id', async (req, res) => {
   const Id = req.params.Id;
 
@@ -142,25 +143,25 @@ app.get('/cart/:Id', async (req, res) => {
   res.json(result);
 });
 
-app.patch('/cart/:Id', async (req, res) => {
-  const Id = req.params.Id;
-  const requestBody = req.body;
+// app.patch('/cart/:Id', async (req, res) => {
+//   const Id = req.params.Id;
+//   const requestBody = req.body;
 
-  const documentCount = await cartCollection.count({
-    _id: new mongodb.ObjectId(Id),
-  });
-  const idExists = documentCount === 1;
+//   const documentCount = await cartCollection.count({
+//     _id: new mongodb.ObjectId(Id),
+//   });
+//   const idExists = documentCount === 1;
 
-  if (idExists) {
-    await cartCollection.updateOne(
-      { _id: new mongodb.ObjectId(Id) },
-      { $set: requestBody }
-    );
-    res.status(200).end();
-  } else {
-    res.sendStatus(404);
-  }
-});
+//   if (idExists) {
+//     await cartCollection.updateOne(
+//       { _id: new mongodb.ObjectId(Id) },
+//       { $set: requestBody }
+//     );
+//     res.status(200).end();
+//   } else {
+//     res.sendStatus(404);
+//   }
+// });
 
 app.listen(PORT, () => {
   console.log('Up and running on: ', PORT);

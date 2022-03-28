@@ -1,18 +1,47 @@
 import './Products.css';
+import { useEffect, useState } from 'react';
 
 export default function Products(props) {
-  async function postToCart(url = '', data = {}) {
-    const response = await fetch(url, {
-      method: 'POST',
-      credentials: 'include',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-    alert('Item Added To Cart');
-    return response.json();
+  const [items, setItems] = useState(JSON.parse(localStorage.getItem('items')));
+
+  useEffect(() => {
+    localStorage.setItem('items', JSON.stringify(items));
+    props.setCartId(items)
+  }, [items, props]);
+
+  console.log(items);
+
+  async function postToCart(data = {}) {
+    if (!items) {
+      const url = 'http://localhost:4649/cart/';
+      const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      }).then((r) => r.json());
+      alert('Item Added To Cart');
+      setItems(response);
+      return response;
+    } else if (items) {
+      const url = `http://localhost:4649/cart/${items.cartId}/`;
+      const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      alert('Item Added To Cart');
+      return response.json();
+    }
+    // setItems(props.cart[0]._id )
   }
 
   // async function buyNow(url = '') {
@@ -40,14 +69,13 @@ export default function Products(props) {
               <p>Price Per Hour: {products.pricePerHr}</p>
               <button
                 onClick={() =>
-                  postToCart('http://localhost:4649/cart/', {
+                  postToCart({
                     products: [
                       {
                         productId: products._id,
+                        qty: 1,
                       },
                     ],
-                  }).then((data) => {
-                    console.log(data);
                   })
                 }
               >
