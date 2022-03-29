@@ -8,6 +8,7 @@ import {
   Whoops404,
   Nav,
 } from './components/pages';
+import OrderInProgress from './components/OrderInProgress/OrderInProgress';
 
 function App() {
   const [products, setProducts] = useState(null);
@@ -54,6 +55,7 @@ function App() {
           }
         />
         <Route path="*" element={<Whoops404 />} />
+        <Route path="cart/orderInProgress" element={<OrderInProgress cart={cart} />} />
       </Routes>
     </div>
   );

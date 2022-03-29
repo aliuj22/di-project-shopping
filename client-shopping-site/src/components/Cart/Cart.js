@@ -1,5 +1,7 @@
 import './Cart.css';
 import Item from '../Item/Item';
+import { Link } from 'react-router-dom';
+
 import { Whoops404 } from '../pages';
 
 export default function Cart(props) {
@@ -55,7 +57,9 @@ export default function Cart(props) {
           ))}
         </ul>
       )}
-      <button>BUY</button>
+      <Link to="orderInProgress">
+        <button>BUY</button>
+      </Link>
     </div>
   );
 }
